@@ -59,7 +59,7 @@ public class CGLibProxySerializerTest {
             @Override
             protected void handleUnregisteredClass( final Class type ) {
                 if ( CGLibProxySerializer.canSerialize( type ) ) {
-                    register( type, getRegisteredClass( CGLibProxySerializer.CGLibProxyMarker.class ) );
+                    register( type, getSerializer( CGLibProxySerializer.CGLibProxyMarker.class ) );
                 }
                 else {
                     super.handleUnregisteredClass( type );
@@ -69,7 +69,7 @@ public class CGLibProxySerializerTest {
         };
         kryo.setRegistrationOptional( true );
         kryo.register( Class.class, new ClassSerializer( kryo ) );
-        kryo.register( CGLibProxySerializer.CGLibProxyMarker.class, new CGLibProxySerializer( kryo ) );
+        kryo.register( CGLibProxySerializer.CGLibProxyMarker.class, new CGLibProxySerializer( ) );
         return kryo;
     }
 

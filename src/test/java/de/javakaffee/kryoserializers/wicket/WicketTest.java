@@ -29,8 +29,9 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.ObjectBuffer;
 import com.esotericsoftware.kryo.Serializer;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.serialize.FieldSerializer;
 import com.esotericsoftware.kryo.serialize.ReferenceFieldSerializer;
 
@@ -103,8 +104,11 @@ public class WicketTest {
         final MarkupContainer markupContainer = new WebMarkupContainer("foo");
         markupContainer.add( new Label( "label1", "foo" ) );
         markupContainer.add( new Label( "label", "hello" ) );
-        final byte[] serialized = new ObjectBuffer( _kryo, 1024 * 1024 ).writeObject( markupContainer );
-        final MarkupContainer deserialized = new ObjectBuffer( _kryo, 1024 * 1024 ).readObject( serialized, markupContainer.getClass() );
+        Output output = new Output(new byte[1024*1024]);
+        _kryo.writeObject( output, markupContainer );
+        final byte[] serialized = output.getBuffer();
+        Input input = new Input(serialized);
+        final MarkupContainer deserialized =  _kryo.readObject( input, markupContainer.getClass() );
         KryoTest.assertDeepEquals( deserialized, markupContainer );
     }
 
@@ -114,8 +118,12 @@ public class WicketTest {
         //markupContainer.info( "foo" );
         final Component child = markupContainer.get( 0 );
         child.isVisible();
-        final byte[] serialized = new ObjectBuffer( _kryo, 1024 * 1024 ).writeObject( markupContainer );
-        final MarkupContainer deserialized = new ObjectBuffer( _kryo, 1024 * 1024 ).readObject( serialized, markupContainer.getClass() );
+
+        Output output = new Output(new byte[1024*1024]);
+        _kryo.writeObject( output, markupContainer );
+        final byte[] serialized = output.getBuffer();
+        Input input = new Input(serialized);
+        final MarkupContainer deserialized =  _kryo.readObject( input, markupContainer.getClass() );
 
         final Component deserializedChild = deserialized.get( 0 );
         deserializedChild.isVisible();
