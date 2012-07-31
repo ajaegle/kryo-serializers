@@ -38,10 +38,6 @@ import java.util.Map;
  */
 public class CopyForIterateMapSerializer extends MapSerializer {
 
-    public CopyForIterateMapSerializer( final Kryo kryo ) {
-        super( kryo );
-    }
-    
     @Override
     public void write( Kryo kryo, Output output, @SuppressWarnings("rawtypes") Map object ) {
         final Map<?, ?> map;

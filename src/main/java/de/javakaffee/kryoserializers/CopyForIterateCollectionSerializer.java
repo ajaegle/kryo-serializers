@@ -37,10 +37,6 @@ import java.util.Collection;
  */
 public class CopyForIterateCollectionSerializer extends CollectionSerializer {
 
-    public CopyForIterateCollectionSerializer( final Kryo kryo ) {
-        super( kryo );
-    }
-    
     @Override
     public void write( Kryo kryo, Output output, @SuppressWarnings("rawtypes") Collection object ) {
         super.write( kryo, output, new ArrayList<Object>((Collection<?>) object));
